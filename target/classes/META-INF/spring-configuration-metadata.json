@@ -1,0 +1,17 @@
+{
+  "groups": [
+    {
+      "name": "bizconfig",
+      "type": "com.yang.active.queueconfig.BizConfig",
+      "sourceType": "com.yang.active.queueconfig.BizConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "bizconfig.queue-name",
+      "type": "java.lang.String",
+      "sourceType": "com.yang.active.queueconfig.BizConfig"
+    }
+  ],
+  "hints": []
+}

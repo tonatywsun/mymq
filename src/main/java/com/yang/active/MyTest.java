@@ -1,4 +1,4 @@
-package com.yang;
+package com.yang.active;
 
 import com.yang.active.producer.Producer;
 
