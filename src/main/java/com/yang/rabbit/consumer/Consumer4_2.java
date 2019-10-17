@@ -9,12 +9,13 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 /**
- * @Description: Work模式的“能者多劳”
+ * @Description: 路由模式
  * @Author: tona.sun
  * @Date: 2019/10/09 15:58
  */
-public class Consumer2_1 {
-    private final static String QUEUE_NAME = "q_yy_02";
+public class Consumer4_2 {
+    private final static String QUEUE_NAME = "q_yy_04_2";
+    private final static String EXCHANGE_NAME = "e_yy_04";
 
     @Test
     public void test() {
@@ -34,6 +35,9 @@ public class Consumer2_1 {
         Channel channel = connection.createChannel();
         // 声明队列
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+        // 绑定队列到交换机
+        channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, "add1*");
+        channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, "add2");
         // 同一时刻服务器只会发一条消息给消费者,等签收之后再发下一条
         channel.basicQos(1);
         // 定义队列的消费者
@@ -44,11 +48,10 @@ public class Consumer2_1 {
         while (true) {
             QueueingConsumer.Delivery delivery = consumer.nextDelivery();
             String message = new String(delivery.getBody());
-            System.out.println(" 消费着2-1获取到消息:" + message);
+            System.out.println(" 消费着4-2获取到消息:" + message);
             //手动签收
             channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-            //这样就能做到1:2的接受数量。处理完之后签收了就再发一个过来
-            //Thread.sleep(2000);
+            Thread.sleep(100);
         }
     }
 }

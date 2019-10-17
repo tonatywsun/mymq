@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 /**
- * @Description: 简单队列消费者
+ * @Description: Work模式的“能者多劳”
  * @Author: tona.sun
  * @Date: 2019/10/09 15:58
  */
@@ -46,8 +46,8 @@ public class Consumer2_2 {
             String message = new String(delivery.getBody());
             System.out.println(" 消费着2-2获取到消息:" + message);
             //手动签收
+            Thread.sleep(100000);
             channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-            Thread.sleep(1000);
         }
     }
 }

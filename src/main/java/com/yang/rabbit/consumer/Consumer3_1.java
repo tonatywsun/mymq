@@ -9,12 +9,19 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 /**
- * @Description: Work模式的“能者多劳”
+ * @Description: 订阅模式 每个订阅者各收各的 互不影响
+ * 1、1个生产者，多个消费者
+ * 2、每一个消费者都有自己的一个队列
+ * 3、生产者没有将消息直接发送到队列，而是发送到了交换机
+ * 4、每个队列都要绑定到交换机
+ * 5、生产者发送的消息，经过交换机，到达队列，实现，一个消息被多个消费者获取的目的
+ * 注意：一个消费者队列可以有多个消费者实例，只有其中一个消费者实例会消费
  * @Author: tona.sun
  * @Date: 2019/10/09 15:58
  */
-public class Consumer2_1 {
-    private final static String QUEUE_NAME = "q_yy_02";
+public class Consumer3_1 {
+    private final static String QUEUE_NAME = "q_yy_03_1";
+    private final static String EXCHANGE_NAME = "e_yy_03";
 
     @Test
     public void test() {
@@ -34,6 +41,8 @@ public class Consumer2_1 {
         Channel channel = connection.createChannel();
         // 声明队列
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+        // 绑定队列到交换机
+        channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, "");
         // 同一时刻服务器只会发一条消息给消费者,等签收之后再发下一条
         channel.basicQos(1);
         // 定义队列的消费者
@@ -47,8 +56,7 @@ public class Consumer2_1 {
             System.out.println(" 消费着2-1获取到消息:" + message);
             //手动签收
             channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
-            //这样就能做到1:2的接受数量。处理完之后签收了就再发一个过来
-            //Thread.sleep(2000);
+            Thread.sleep(100);
         }
     }
 }
